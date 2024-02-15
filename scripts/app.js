@@ -1,40 +1,66 @@
-import { getLocalStorage, saveToLocalStorage, removeFromLocalStorage } from "./localStorage.js";
+import { getLocalStorage, saveToLocalStorage, removeFromLocalStorage, saveBudgetToLocalStorage } from "./localStorage.js";
 
 let budgetBtn = document.getElementById("budgetBtn");
 let addEBtn = document.getElementById("addEBtn");
-let removeEBtn = document.getElementById("removeEBtn");
 let infoPlacement = document.getElementById("infoPlacement");
 let inputData = document.getElementById("inputData");
 let popMoney = document.getElementById("popMoney");
 
 let isBudgetOpen = false;
 let isAddOpen = false;
-let isRemoveOpen = false;
+let totalBalance = 0;
 
 function popBudget() {
+    infoPlacement.innerHTML = "";
     let storedNotes = getLocalStorage();
 
+    if (storedNotes.length === 0) {
+        saveBudgetToLocalStorage("Budget:/0")
+        storedNotes = getLocalStorage();
+    };
+
     storedNotes.forEach(note => {
+        let splitNote = note.split("/");
+        let swithCol = false;
+
         let holderDiv = document.createElement("div");
-        holderDiv.className = "my-2 grid grid-cols-2";
+        holderDiv.className = "my-2 grid grid-cols-12";
 
         let noteName = document.createElement("p");
-        noteName.className = "col-span-1 mx-1 p-1 text-left text-base";
-        // noteName.textContent = nameTaskL;
+        noteName.className = "col-span-7 mx-1 p-1 text-left text-base";
+        noteName.textContent = splitNote[0];
+        holderDiv.appendChild(noteName);
+
+        if (splitNote[0] !== "Budget:") {
+            let removeBtn = document.createElement("button");
+            removeBtn.className = "ml-5 col-span-3 rounded-lg bg-blue-400 text-sm";
+            removeBtn.innerText = "Remove";
+            removeBtn.addEventListener('click', function () {
+                removeFromLocalStorage(note);
+                popBudget();
+            });
+            holderDiv.appendChild(removeBtn);
+        }else{
+            swithCol = true;
+        }
 
         let noteAmount = document.createElement("p");
-        noteAmount.className = "col-span-1 mx-1 p-1 text-right text-base";
-        // taskPriority.textContent = "Priority: " + priorityTaskL;
-
-        holderDiv.appendChild(noteName);
+        if(swithCol){
+            noteAmount.className = "col-span-5 mx-1 p-1 text-right text-base";
+        }else{
+            noteAmount.className = "col-span-2 mx-1 p-1 text-right text-base";
+        }
+        noteAmount.textContent = splitNote[1];
         holderDiv.appendChild(noteAmount);
+
         infoPlacement.appendChild(holderDiv);
+
+        // popMoney.innerText = splitNote[2]
     });
 };
 
 budgetBtn.addEventListener('click', function () {
     isAddOpen = false;
-    isRemoveOpen = false;
     inputData.innerHTML = "";
 
     if (isBudgetOpen === false) {
@@ -61,10 +87,18 @@ budgetBtn.addEventListener('click', function () {
         button.className = "rounded-lg bg-blue-400 w-32 text-base";
         button.innerText = "Set";
         button.addEventListener('click', function () {
-            if(input.value !== "" && !isNaN(input.value)){
-
-
+            if (input.value !== "" && !isNaN(input.value)) {
+                // totalBalance = totalBalance + (input.value - totalBalance);
+                let storedNotes = getLocalStorage();
+                storedNotes.forEach(note => {
+                    let splitNote = note.split("/");
+                    if (splitNote[0] === "Budget:") {
+                        removeFromLocalStorage(note);
+                    };
+                });
+                saveBudgetToLocalStorage("Budget:" + "/" + input.value);
                 inputData.innerHTML = "";
+                popBudget();
                 isBudgetOpen = false;
             };
         });
@@ -77,12 +111,11 @@ budgetBtn.addEventListener('click', function () {
         isBudgetOpen = true;
     } else {
         isBudgetOpen = false;
-    }
+    };
 });
 
 addEBtn.addEventListener('click', function () {
     isBudgetOpen = false;
-    isRemoveOpen = false;
     inputData.innerHTML = "";
 
     if (isAddOpen === false) {
@@ -118,6 +151,15 @@ addEBtn.addEventListener('click', function () {
         let button = document.createElement("button");
         button.className = "rounded-lg bg-blue-400 w-32 text-base";
         button.innerText = "Add";
+        button.addEventListener('click', function () {
+            if (input1.value !== "" && input2.value !== "" && !isNaN(input2.value)) {
+                saveToLocalStorage(`${input1.value}:` + "/" + input2.value);
+                inputData.innerHTML = "";
+                popBudget();
+                isBudgetOpen = false;
+            };
+        });
+
         innerDiv2.appendChild(button);
         holderDiv.appendChild(title);
         holderDiv.appendChild(subText);
@@ -131,6 +173,4 @@ addEBtn.addEventListener('click', function () {
     };
 });
 
-removeEBtn.addEventListener('click', function () {
-    inputData.innerHTML = "";
-});
+popBudget();

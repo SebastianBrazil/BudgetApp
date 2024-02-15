@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Budget App</title>
     <link rel="stylesheet" href="./dist/output.css">
 </head>
 
 <body>
     <!-- Tailwind Classes for elements added to JS -->
-    <div style="display: none;" class="my-2 text-center text-lg flex justify-center rounded-lg w-40 text-base mt-2 bg-blue-400 w-32 grid grid-cols-2 col-span-1 mx-1 p-1 text-left text-right text-sm mr-1 ml-1 h-7 pt-1 pb-1">
+    <div style="display: none;" class="ml-5 my-2 text-center text-lg flex justify-center rounded-lg w-40 text-base mt-2 bg-blue-400 w-32 grid grid-cols-12 grid-cols-3 col-span-7 col-span-5 col-span-3 col-span-2 col-span-1 mx-1 p-1 text-left text-right text-sm mr-1 ml-1 h-7 pt-1 pb-1 w-20">
     </div>
 
     <div class="flex justify-center h-full min-h-screen bg-emerald-300 pb-6">
@@ -23,15 +24,13 @@
                         class="mx-2 w-64 block bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mb-6 bg-blue-400">Update Budget</button>
                     <button id="addEBtn"
                         class="mx-2 w-64 block bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mb-6 bg-blue-400">Add Expense</button>
-                    <button id="removeEBtn"
-                        class="mx-2 w-64 block bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 mb-6 bg-blue-400">Remove Expense</button>
                 </div>
             </div>
 
             <div class="rounded-lg bg-slate-500 pb-5 pt-2 mx-1">
                 <div class="flex justify-center">
                     <div class="my-2 py-1 text-center w-11/12 bg-white">
-                        <p class="text-xl">Balance: <span id="popMoney">0</span> </p>
+                        <p class="text-xl">Balance: $<span id="popMoney">0</span> </p>
                     </div>
                 </div>
 
@@ -42,10 +41,6 @@
 
                 <div class="flex justify-center">
                     <div id="infoPlacement" class="mb-2 w-11/12 bg-white">
-                        <div class="my-2 grid grid-cols-2">
-                            <p class="col-span-1 mx-1 p-1 text-left text-base">Budget:</p>
-                            <p class="col-span-1 mx-1 p-1 text-right text-base">0</p>
-                        </div>
                     </div>
                 </div>
             </div>
