@@ -1,8 +1,6 @@
 const saveToLocalStorage = (savingData) => {
     let savedBudget = getLocalStorage();
-    if (!savedBudget.includes(savingData)) {
-        savedBudget.splice(0, 0, savingData);
-    }
+    savedBudget.splice(0, 0, savingData);
     localStorage.setItem("localBudget", JSON.stringify(savedBudget));
 };
 

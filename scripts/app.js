@@ -13,14 +13,16 @@ let totalBalance = 0;
 function popBudget() {
     infoPlacement.innerHTML = "";
     let storedNotes = getLocalStorage();
+    let passNum;
 
     if (storedNotes.length === 0) {
-        saveBudgetToLocalStorage("Budget:/0")
+        saveBudgetToLocalStorage("Budget:/+0")
         storedNotes = getLocalStorage();
     };
 
     storedNotes.forEach(note => {
         let splitNote = note.split("/");
+        let grabNum = splitNote[1]
         let swithCol = false;
 
         let holderDiv = document.createElement("div");
@@ -40,24 +42,53 @@ function popBudget() {
                 popBudget();
             });
             holderDiv.appendChild(removeBtn);
-        }else{
+        } else {
+            grabNum = `+${splitNote[1]}`
+            passNum = grabNum;
             swithCol = true;
         }
 
         let noteAmount = document.createElement("p");
-        if(swithCol){
+        if (swithCol) {
             noteAmount.className = "col-span-5 mx-1 p-1 text-right text-base";
-        }else{
+        } else {
             noteAmount.className = "col-span-2 mx-1 p-1 text-right text-base";
         }
-        noteAmount.textContent = splitNote[1];
+        if (grabNum[0] !== "+" && grabNum[0] !== "-") {
+            noteAmount.textContent = "-" + grabNum;
+        } else {
+            noteAmount.textContent = grabNum;
+        }
         holderDiv.appendChild(noteAmount);
 
         infoPlacement.appendChild(holderDiv);
-
-        // popMoney.innerText = splitNote[2]
     });
+    doMath(passNum);
 };
+
+function doMath(numby) {
+    let storedNotes = getLocalStorage();
+    totalBalance = 0;
+
+    storedNotes.forEach(note => {
+        // let splitNote = note.split("/")
+        // let numby = splitNote[1];
+
+        if (numby[0] === "+") {
+            numby = numby.split("+");
+            let turnToNum = Number.parseInt(numby[1])
+            totalBalance = totalBalance + turnToNum;
+            console.log(totalBalance)
+        } else if (numby[0] === "-") {
+            numby = numby.split("-");
+            let turnToNum = Number.parseInt(numby[1])
+            totalBalance = totalBalance - turnToNum;
+        } else {
+            totalBalance = totalBalance - numby;
+        };
+    });
+    popMoney.innerText = totalBalance;
+}
 
 budgetBtn.addEventListener('click', function () {
     isAddOpen = false;
@@ -84,11 +115,14 @@ budgetBtn.addEventListener('click', function () {
         innerDiv2.className = "flex justify-center mt-2";
 
         let button = document.createElement("button");
-        button.className = "rounded-lg bg-blue-400 w-32 text-base";
+        button.className = "rounded-lg bg-red-400 w-32 text-base";
         button.innerText = "Set";
         button.addEventListener('click', function () {
-            if (input.value !== "" && !isNaN(input.value)) {
-                // totalBalance = totalBalance + (input.value - totalBalance);
+            let parseThis;
+            let parseThisMinus;
+            parseThis = input.value.split("+")[1];
+            parseThisMinus = input.value.split("-")[1];
+            if (input.value !== "" && !isNaN(input.value) || input.value !== "" && !isNaN(parseThis) || input.value !== "" && !isNaN(parseThis)) {
                 let storedNotes = getLocalStorage();
                 storedNotes.forEach(note => {
                     let splitNote = note.split("/");
@@ -149,14 +183,19 @@ addEBtn.addEventListener('click', function () {
         innerDiv2.className = "flex justify-center mt-2";
 
         let button = document.createElement("button");
-        button.className = "rounded-lg bg-blue-400 w-32 text-base";
+        button.className = "rounded-lg bg-red-400 w-32 text-base";
         button.innerText = "Add";
+
         button.addEventListener('click', function () {
-            if (input1.value !== "" && input2.value !== "" && !isNaN(input2.value)) {
+            let parseThis;
+            let parseThisMinus;
+            parseThis = input2.value.split("+")[1];
+            parseThisMinus = input2.value.split("-")[1];
+            if (input1.value !== "" && input2.value !== "" && !isNaN(input2.value) || input1.value !== "" && input2.value !== "" && !isNaN(parseThis) || input1.value !== "" && input2.value !== "" && !isNaN(parseThisMinus)) {
                 saveToLocalStorage(`${input1.value}:` + "/" + input2.value);
                 inputData.innerHTML = "";
                 popBudget();
-                isBudgetOpen = false;
+                isAddOpen = false;
             };
         });
 
