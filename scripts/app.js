@@ -13,7 +13,7 @@ let totalBalance = 0;
 function popBudget() {
     infoPlacement.innerHTML = "";
     let storedNotes = getLocalStorage();
-    let passNum;
+    // let passNum;
 
     if (storedNotes.length === 0) {
         saveBudgetToLocalStorage("Budget:/+0")
@@ -43,8 +43,8 @@ function popBudget() {
             });
             holderDiv.appendChild(removeBtn);
         } else {
-            grabNum = `+${splitNote[1]}`
-            passNum = grabNum;
+            // grabNum = `+${splitNote[1]}`
+            // passNum = grabNum;
             swithCol = true;
         }
 
@@ -54,7 +54,7 @@ function popBudget() {
         } else {
             noteAmount.className = "col-span-2 mx-1 p-1 text-right text-base";
         }
-        if (grabNum[0] !== "+" && grabNum[0] !== "-") {
+        if (grabNum[0] !== "+" && grabNum[0] !== "-" && splitNote[0] !== "Budget:") {
             noteAmount.textContent = "-" + grabNum;
         } else {
             noteAmount.textContent = grabNum;
@@ -63,22 +63,25 @@ function popBudget() {
 
         infoPlacement.appendChild(holderDiv);
     });
-    doMath(passNum);
+    doMath();
 };
 
-function doMath(numby) {
+function doMath() {
     let storedNotes = getLocalStorage();
     totalBalance = 0;
 
     storedNotes.forEach(note => {
-        // let splitNote = note.split("/")
-        // let numby = splitNote[1];
+        let splitNote = note.split("/")
+        let numby = splitNote[1];
 
-        if (numby[0] === "+") {
-            numby = numby.split("+");
-            let turnToNum = Number.parseInt(numby[1])
-            totalBalance = totalBalance + turnToNum;
-            console.log(totalBalance)
+        if (numby[0] === "+" || splitNote[0] === "Budget:") {
+            if(numby[0] === "+"){
+                numby = numby.split("+");
+                let turnToNum = Number.parseInt(numby[1])
+                totalBalance = totalBalance + turnToNum;
+            }else{
+                totalBalance = totalBalance + Number.parseInt(numby);
+            };
         } else if (numby[0] === "-") {
             numby = numby.split("-");
             let turnToNum = Number.parseInt(numby[1])
@@ -88,7 +91,7 @@ function doMath(numby) {
         };
     });
     popMoney.innerText = totalBalance;
-}
+};
 
 budgetBtn.addEventListener('click', function () {
     isAddOpen = false;
