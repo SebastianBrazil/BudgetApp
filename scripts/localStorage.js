@@ -4,6 +4,7 @@ const saveToLocalStorage = (savingData) => {
     localStorage.setItem("localBudget", JSON.stringify(savedBudget));
 };
 
+// What differenciates the two save functions is that the one above uses .splice to add data to the front of the array, while the one below adds data (specifcally the budget) to the end of the array.
 const saveBudgetToLocalStorage = (savingData) => {
     let savedBudget = getLocalStorage();
     if (!savedBudget.includes(savingData)) {

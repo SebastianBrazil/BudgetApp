@@ -10,10 +10,10 @@ let isBudgetOpen = false;
 let isAddOpen = false;
 let totalBalance = 0;
 
+// Function displays all data
 function popBudget() {
     infoPlacement.innerHTML = "";
     let storedNotes = getLocalStorage();
-    // let passNum;
 
     if (storedNotes.length === 0) {
         saveBudgetToLocalStorage("Budget:/+0")
@@ -43,8 +43,6 @@ function popBudget() {
             });
             holderDiv.appendChild(removeBtn);
         } else {
-            // grabNum = `+${splitNote[1]}`
-            // passNum = grabNum;
             swithCol = true;
         }
 
@@ -66,6 +64,7 @@ function popBudget() {
     doMath();
 };
 
+// This function does the math for the balance
 function doMath() {
     let storedNotes = getLocalStorage();
     totalBalance = 0;
@@ -93,6 +92,7 @@ function doMath() {
     popMoney.innerText = totalBalance;
 };
 
+// This eventListener allows the user to set their budget
 budgetBtn.addEventListener('click', function () {
     isAddOpen = false;
     inputData.innerHTML = "";
@@ -151,6 +151,7 @@ budgetBtn.addEventListener('click', function () {
     };
 });
 
+// This eventListener allows the user to add expenses
 addEBtn.addEventListener('click', function () {
     isBudgetOpen = false;
     inputData.innerHTML = "";
